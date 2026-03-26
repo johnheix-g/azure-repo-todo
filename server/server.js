@@ -7,11 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const config = {
-  user: "YOUR_USER",
-  password: "YOUR_PASSWORD",
-  server: "yourserver.database.windows.net",
-  database: "tododb",
-  options: { encrypt: true }
+  user: "azure-sa",
+  password: "Nanping1993",
+  server: "my-todo-server.database.windows.net",
+  database: "free-sql-db-0341364",
+  options: { encrypt: true },
 };
 
 app.get("/todos", async (req, res) => {
