@@ -4,7 +4,7 @@ function App() {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/todos")
+    fetch("https://todo-api-azure.azurewebsites.net/todos")
       .then((res) => res.json())
       .then((data) => setTodos(data));
   }, []);
