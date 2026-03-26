@@ -5,7 +5,7 @@ function App() {
 
   useEffect(() => {
     fetch(
-      "https://todo-api-azure-g2djafc0d5gyc0bn.canadacentral-01.azurewebsites.net/",
+      "https://todo-api-azure-g2djafc0d5gyc0bn.canadacentral-01.azurewebsites.net/todos",
     )
       .then((res) => res.json())
       .then((data) => setTodos(data));
