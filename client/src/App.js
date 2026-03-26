@@ -4,7 +4,9 @@ function App() {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    fetch("https://todo-api-azure.azurewebsites.net/todos")
+    fetch(
+      "https://todo-api-azure-g2djafc0d5gyc0bn.canadacentral-01.azurewebsites.net/",
+    )
       .then((res) => res.json())
       .then((data) => setTodos(data));
   }, []);
