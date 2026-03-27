@@ -6,7 +6,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Azure
+// //Azure
 const config = {
   user: process.env.SQL_USER,
   password: process.env.SQL_PASSWORD,
@@ -15,6 +15,7 @@ const config = {
   options: {
     encrypt: true,
   },
+
   // user: "azure-sa",
   // password: "Nanping1993",
   // server: "my-todo-server.database.windows.net",
@@ -22,7 +23,7 @@ const config = {
   // options: { encrypt: true,trustServerCertificate: false },
 };
 
-// local
+// //local;
 // const config = {
 //   user: "sa",
 //   password: "nanping93",
@@ -40,22 +41,36 @@ app.get("/todos", async (req, res) => {
     const result = await sql.query`SELECT * FROM Todos`;
     res.json(result.recordset);
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).send({ error: err.message });
   }
 });
 
 app.post("/todos", async (req, res) => {
-  const { title } = req.body;
+  const { title, completed } = req.body;
 
   try {
     await sql.connect(config);
     await sql.query`
       INSERT INTO Todos(title, completed)
-      VALUES (${title}, 0)
+      VALUES (${title}, ${completed})
     `;
-    res.send("Todo created");
+    res.send({ message: "Todo created" });
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).send({ error: err.message });
+  }
+});
+
+app.delete("/todos", async (req, res) => {
+  const { id, title } = req.body;
+
+  try {
+    await sql.connect(config);
+    await sql.query`
+      DELETE FROM Todos WHERE id = ${id}
+    `;
+    res.send({ message: `${title} deleted` });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
   }
 });
 
