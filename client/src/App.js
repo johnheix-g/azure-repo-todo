@@ -4,12 +4,17 @@ function App() {
   const [todos, setTodos] = useState([]);
 
   useEffect(() => {
-    fetch(
-      "https://todo-api-azure-g2djafc0d5gyc0bn.canadacentral-01.azurewebsites.net/todos",
-    )
+    fetch("https://gray-stone-0c7dad60f.2.azurestaticapps.net/todos")
       .then((res) => res.json())
       .then((data) => setTodos(data));
   }, []);
+
+  // Local
+  // useEffect(() => {
+  //   fetch("http://localhost:5000/todos")
+  //     .then((res) => res.json())
+  //     .then((data) => setTodos(data));
+  // }, []);
 
   return (
     <div>

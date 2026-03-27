@@ -6,13 +6,33 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Azure
 const config = {
-  user: "azure-sa",
-  password: "Nanping1993",
-  server: "my-todo-server.database.windows.net",
-  database: "free-sql-db-0341364",
-  options: { encrypt: true },
+  user: process.env.SQL_USER,
+  password: process.env.SQL_PASSWORD,
+  server: process.env.SQL_SERVER,
+  database: process.env.SQL_DATABASE,
+  options: {
+    encrypt: true,
+  },
+  // user: "azure-sa",
+  // password: "Nanping1993",
+  // server: "my-todo-server.database.windows.net",
+  // database: "free-sql-db-0341364",
+  // options: { encrypt: true,trustServerCertificate: false },
 };
+
+// local
+// const config = {
+//   user: "sa",
+//   password: "nanping93",
+//   server: "localhost\\SQLEXPRESS",
+//   database: "tododb",
+//   options: {
+//     encrypt: false, // turn off encryption for local SQLExpress
+//     trustServerCertificate: true,
+//   },
+// };
 
 app.get("/todos", async (req, res) => {
   try {
