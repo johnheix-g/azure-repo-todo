@@ -36,7 +36,7 @@ function App() {
         .then((res) => res.json())
         .then((data) => setTodos(data));
     }
-  }, [serviceUrl.reload]);
+  }, [serviceUrl]);
 
   useEffect(() => {
     console.log("Todos", todos);
