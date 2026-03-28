@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
 
-// const LocalServiceURL = "http://localhost:5000/todos";
-// const AzureServiceURL =
-//   "https://todo-api-azure-g2djafc0d5gyc0bn.canadacentral-01.azurewebsites.net/todos";
 const API_URL = process.env.REACT_APP_API_URL;
 
 function App() {
@@ -14,17 +11,8 @@ function App() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
-  // useEffect(() => {
-  //   fetch("https://gray-stone-0c7dad60f.2.azurestaticapps.net:5000/todos")
-  //     .then((res) => res.json())
-  //     .then((data) => setTodos(data));
-  // }, []);
-
-  // Local
   useEffect(() => {
-    const fullUrl = window.location.href;
     setServiceUrl({
-      //url: fullUrl.includes("localhost") ? LocalServiceURL : AzureServiceURL,
       url: API_URL,
       reload: true,
     });
