@@ -27,6 +27,7 @@ jobs:
 
           app_location: "./client"
           output_location: "build"
+          app_build_command: "npm run build"
           # REMOVE api_location because Express is NOT supported here
 
   close_pull_request_job:
