@@ -44,6 +44,10 @@ const config = {
     trustServerCertificate: !runningInAzure, // trust server certificate for local development
   },
 };
+console.log("SQL_USER:", process.env.SQL_USER);
+console.log("SQL_SERVER:", process.env.SQL_SERVER);
+console.log("SQL_DATABASE:", process.env.SQL_DATABASE);
+console.log("SQL_PASSWORD:", process.env.SQL_PASSWORD);
 
 console.log("Running in Azure:", runningInAzure);
 console.log(
