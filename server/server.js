@@ -50,7 +50,8 @@ console.log(
   "Using DB config:",
   runningInAzure ? "Azure SQL" : "Local SQLExpress",
 );
-module.exports = config; // Export config for testing purposes
+// below line is not working on Azure, it makes config undefined
+// module.exports = config; // Export config for testing purposes
 
 const poolPromise = new sql.ConnectionPool(config)
   .connect()
