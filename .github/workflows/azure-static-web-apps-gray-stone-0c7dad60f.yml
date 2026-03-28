@@ -18,6 +18,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Install dependencies
+        working-directory: ./client
+        run: npm install
+
       - name: Build And Deploy
         uses: Azure/static-web-apps-deploy@v1
         with:
@@ -26,7 +30,8 @@ jobs:
           action: "upload"
 
           app_location: "./client"
-          output_location: "build"
+          app_build_command: "npm run build"
+          app_artifact_location: "build"
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
