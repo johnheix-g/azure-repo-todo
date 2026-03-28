@@ -1,15 +1,18 @@
 import { useEffect, useState } from "react";
-
-const API_URL = process.env.REACT_APP_API_URL;
+import ConfirmModal from "./ConfirmModal";
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [todoToDelete, setTodoToDelete] = useState(null);
   const [serviceUrl, setServiceUrl] = useState({
     url: "",
     reload: false,
   });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     setServiceUrl({
@@ -78,39 +81,55 @@ function App() {
     setMessage("");
   };
 
-  const handleDeleteTitle = (the, todo) => {
-    console.log("the", the.target.dataset);
-    const id = the.target.dataset.id;
-    const title = the.target.dataset.title;
-    // or
-    //const id = todo.id;
-    //const title = todo.title;
+  // const handleDeleteTitle = (the, todo) => {
+  //   console.log("the", the.target.dataset);
+  //   const id = the.target.dataset.id;
+  //   const title = the.target.dataset.title;
+  //   // or
+  //   //const id = todo.id;
+  //   //const title = todo.title;
 
-    const yesNo = window.confirm(
-      `Are you sure you want to delete this title? ${todo.title}`,
-      "",
-    );
-    if (yesNo) {
-      fetch(serviceUrl.url, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: id, title: title }),
-      })
-        .then((response) => {
-          if (!response.ok)
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          return response.json();
-        })
-        .then((data) => {
-          console.log("DELETE response:", data.message);
-          setMessage(data.message);
-          setServiceUrl({ ...serviceUrl, reload: true });
-        })
-        .catch((error) => {
-          setError(error.error);
-          console.error("Error:", error.error);
-        });
-    }
+  //   const yesNo = window.confirm(
+  //     `Are you sure you want to delete this title? ${todo.title}`,
+  //     "",
+  //   );
+  //   if (yesNo) {
+  //     fetch(serviceUrl.url, {
+  //       method: "DELETE",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ id: id, title: title }),
+  //     })
+  //       .then((response) => {
+  //         if (!response.ok)
+  //           throw new Error(`HTTP error! Status: ${response.status}`);
+  //         return response.json();
+  //       })
+  //       .then((data) => {
+  //         console.log("DELETE response:", data.message);
+  //         setMessage(data.message);
+  //         setServiceUrl({ ...serviceUrl, reload: true });
+  //       })
+  //       .catch((error) => {
+  //         setError(error.error);
+  //         console.error("Error:", error.error);
+  //       });
+  //   }
+  // };
+
+  const openDeleteModal = (todo) => {
+    setTodoToDelete(todo);
+    setModalOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    await fetch(API_URL, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: todoToDelete.id, title: todoToDelete.title }),
+    });
+
+    setTodos(todos.filter((t) => t.id !== todoToDelete.id));
+    setModalOpen(false);
   };
 
   return (
@@ -153,13 +172,14 @@ function App() {
       {todos.map((todo) => (
         <div key={todo.id}>
           <span className="delete">
-            <button
+            <button onClick={() => openDeleteModal(todo)}>Delete</button>
+            {/* <button
               data-id={todo.id}
               data-title={todo.title}
               onClick={(e) => handleDeleteTitle(e, todo)}
             >
               Delete
-            </button>
+            </button> */}
           </span>
           <span
             className="completed"
@@ -170,6 +190,12 @@ function App() {
           <span className="title">{todo.title}</span>
         </div>
       ))}
+      <ConfirmModal
+        open={modalOpen}
+        title={todoToDelete?.title}
+        onConfirm={confirmDelete}
+        onCancel={() => setModalOpen(false)}
+      />
     </div>
   );
 }
