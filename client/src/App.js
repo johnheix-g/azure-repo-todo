@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import ConfirmModal from "./ConfirmModal";
 
+const API_URL = process.env.REACT_APP_API_URL;
+
 function App() {
   const [todos, setTodos] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
@@ -11,8 +13,6 @@ function App() {
   });
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
-  const API_URL = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     setServiceUrl({
