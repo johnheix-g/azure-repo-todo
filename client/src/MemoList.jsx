@@ -19,13 +19,17 @@ export default function MemoList() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
   const [detailTarget, setDetailTarget] = useState(null);
+  const [orderBy, setOrderBy] = useState("date");
+  const [orderDirection, setOrderDirection] = useState("desc");
 
   const loadMemos = useCallback(async () => {
-    const res = await fetch(`${API}?page=${page}&pageSize=${pageSize}`);
+    const res = await fetch(
+      `${API}?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&orderDirection=${orderDirection}`,
+    );
     const data = await res.json();
     setMemos(data.data);
     setTotal(data.total);
-  }, [page, pageSize, API]);
+  }, [page, pageSize, API, orderBy, orderDirection]);
 
   useEffect(() => {
     loadMemos();
@@ -57,6 +61,15 @@ export default function MemoList() {
     setEditTarget(null);
   };
 
+  const handleOrder = (field) => {
+    if (orderBy === field) {
+      setOrderDirection(orderDirection === "asc" ? "desc" : "asc");
+    } else {
+      setOrderBy(field);
+      setOrderDirection("asc");
+    }
+  };
+
   return (
     <div className="memo-container">
       <h1>Memo List</h1>
@@ -72,9 +85,30 @@ export default function MemoList() {
       <table className="memo-table">
         <thead>
           <tr>
-            <th>Type</th>
-            <th>Title</th>
-            <th>Date</th>
+            <th onClick={() => handleOrder("Type")}>
+              Type{" "}
+              {orderBy === "Type"
+                ? orderDirection === "asc"
+                  ? " ▲"
+                  : " ▼"
+                : null}
+            </th>
+            <th onClick={() => handleOrder("Title")}>
+              Title{" "}
+              {orderBy === "Title"
+                ? orderDirection === "asc"
+                  ? " ▲"
+                  : " ▼"
+                : null}
+            </th>
+            <th onClick={() => handleOrder("Date")}>
+              Date{" "}
+              {orderBy === "Date"
+                ? orderDirection === "asc"
+                  ? " ▲"
+                  : " ▼"
+                : null}
+            </th>
             <th>Note</th>
             <th>Completed</th>
             <th>Action</th>

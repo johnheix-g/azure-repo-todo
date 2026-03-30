@@ -122,6 +122,9 @@ app.get("/memos", async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const pageSize = parseInt(req.query.pageSize) || 10;
   const offset = (page - 1) * pageSize;
+  const orderBy = req.query.orderBy || "date"; // Default order by date
+  const orderDirection = req.query.orderDirection === "asc" ? "ASC" : "DESC"; // Default to DESC
+
   console.log(
     `Fetching memos - Page: ${page}, Page Size: ${pageSize}, Offset: ${offset}`,
   );
@@ -131,7 +134,7 @@ app.get("/memos", async (req, res) => {
     const result = await pool.request().query(`
       SELECT *
       FROM Memos
-      ORDER BY date DESC
+      ORDER BY ${orderBy} ${orderDirection}
       OFFSET ${offset} ROWS
       FETCH NEXT ${pageSize} ROWS ONLY;
 
