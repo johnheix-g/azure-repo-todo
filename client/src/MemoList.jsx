@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ConfirmModal from "./ConfirmModal";
 import ModalComponent from "./ModalComponent";
 import { API_URL } from "./const";
@@ -18,18 +18,16 @@ export default function MemoList() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    loadMemos();
-  }, [page]);
-
-  const loadMemos = async () => {
+  const loadMemos = useCallback(async () => {
     const res = await fetch(`${API}?page=${page}&pageSize=${pageSize}`);
-    console.log("Response", res);
     const data = await res.json();
     setMemos(data.data);
     setTotal(data.total);
-  };
+  }, [page, pageSize, API]);
+
+  useEffect(() => {
+    loadMemos();
+  }, [loadMemos]);
 
   const deleteMemo = async () => {
     await fetch(`${API}/${deleteTarget.id}`, { method: "DELETE" });
