@@ -18,8 +18,9 @@ export default function MemoList() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (page > 0) loadMemos();
+    loadMemos();
   }, [page]);
 
   const loadMemos = async () => {
