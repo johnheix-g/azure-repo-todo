@@ -24,11 +24,19 @@ function App() {
 
   return (
     <div id="content">
-      <button className="button" onClick={() => setAll(Button.TODO)}>
+      <button
+        title="Todo List"
+        className="button"
+        onClick={() => setAll(Button.TODO)}
+      >
         Todo List
       </button>
-      <button className="button" onClick={() => setAll(Button.MEMO)}>
-        Memo List
+      <button
+        title="Memo Management"
+        className="button"
+        onClick={() => setAll(Button.MEMO)}
+      >
+        Memo Management
       </button>
       {todo ? <TodoExample /> : memo ? <MemoList /> : null}
     </div>

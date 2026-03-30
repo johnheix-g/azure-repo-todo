@@ -61,7 +61,11 @@ export default function MemoList() {
     <div className="memo-container">
       <h1>Memo List</h1>
 
-      <button className="add-new" onClick={() => setEditMemoOpen(true)}>
+      <button
+        title="Add New Memo"
+        className="add-new"
+        onClick={() => setEditMemoOpen(true)}
+      >
         Add New Memo
       </button>
 
@@ -83,21 +87,22 @@ export default function MemoList() {
               <tr key={"mrmo-" + m.id}>
                 <td>{m.type}</td>
                 <td>
-                  <a
-                    href="#"
+                  <button
+                    title="View Details"
                     onClick={(e) => {
-                      e.preventDefault();
                       setDetailTarget(m);
                     }}
                   >
                     {m.title}
-                  </a>
+                  </button>
                 </td>
                 <td>{new Date(m.date).toISOString().split("T")[0]}</td>
                 <td>{m.note}</td>
                 <td>{m.completed ? "✔" : "✘"}</td>
                 <td>
                   <button
+                    title="Edit Memo"
+                    className="btn btn-primary"
                     onClick={() => {
                       setEditTarget(m);
                       setEditMemoOpen(true);
@@ -107,6 +112,7 @@ export default function MemoList() {
                   </button>
                   &nbsp;
                   <button
+                    title="Delete Memo"
                     className="btn btn-danger"
                     onClick={() => setDeleteTarget(m)}
                   >
