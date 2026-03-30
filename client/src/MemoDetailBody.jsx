@@ -1,3 +1,5 @@
+import "./MemoDetailBody.css";
+
 export default function MemoDetailBody({ memo }) {
   return (
     <div className="memo-detail">
