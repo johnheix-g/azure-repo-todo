@@ -1,4 +1,4 @@
-import { use, useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ConfirmModal from "./ConfirmModal";
 import ModalComponent from "./ModalComponent";
 import { API_URL } from "./const";
