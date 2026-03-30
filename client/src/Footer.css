@@ -1,0 +1,51 @@
+/* Container for modal footer buttons */
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Cancel button */
+.btn-cancel {
+  background: #e0e0e0;
+  color: #333;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-cancel:hover {
+  background: #d5d5d5;
+}
+
+/* Submit button (default) */
+.btn-submit {
+  background: #0078ff;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-submit:hover {
+  background: #0063d1;
+}
+
+/* Delete button (danger) */
+.btn-delete {
+  background: #d9534f;
+  color: white;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.btn-delete:hover {
+  background: #c64541;
+}

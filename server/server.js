@@ -113,5 +113,91 @@ app.get("/health", (req, res) => {
   res.send("OK");
 });
 
+/**
+ * Below are the new endpoints for the Memo feature. They follow RESTful conventions and include pagination for the GET endpoint.
+ * Make sure to test these endpoints using Postman or a similar tool, and update the client-side code to interact with them.
+ */
+// Memos GET endpoint with pagination /memos?page=1&pageSize=10
+app.get("/memos", async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = parseInt(req.query.pageSize) || 10;
+  const offset = (page - 1) * pageSize;
+  console.log(
+    `Fetching memos - Page: ${page}, Page Size: ${pageSize}, Offset: ${offset}`,
+  );
+  try {
+    const pool = await poolPromise;
+
+    const result = await pool.request().query(`
+      SELECT *
+      FROM Memos
+      ORDER BY date DESC
+      OFFSET ${offset} ROWS
+      FETCH NEXT ${pageSize} ROWS ONLY;
+
+      SELECT COUNT(*) AS total FROM Memos;
+    `);
+
+    res.json({
+      data: result.recordsets[0],
+      total: result.recordsets[1][0].total,
+      page,
+      pageSize,
+    });
+  } catch (err) {
+    console.log("Error fetching memos", err);
+    res.status(500).send({ error: err.message });
+  }
+});
+
+// Memos POST Add new memo /memos
+app.post("/memos", async (req, res) => {
+  const { type, title, date, note, completed } = req.body;
+  console.log("Creating memo with data:", req.body);
+  try {
+    const pool = await poolPromise;
+    await pool.request().query`
+      INSERT INTO Memos(type, title, date, note, completed)
+      VALUES (${type}, ${title}, ${date}, ${note}, ${completed})
+    `;
+    res.send({ message: "Memo created" });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+});
+
+// Memos PUT /memos/:id (Edit)
+app.put("/memos/:id", async (req, res) => {
+  const { id } = req.params;
+  const { type, title, date, note, completed } = req.body;
+  console.log(`Updating memo ${id} with data:`, req.body);
+  try {
+    const pool = await poolPromise;
+    await pool.request().query`
+      UPDATE Memos
+      SET type=${type}, title=${title}, date=${date}, note=${note}, completed=${completed}
+      WHERE Id=${id}
+    `;
+    res.send({ message: "Memo updated" });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+});
+
+// Memos DELETE endpoint /memos/:id
+app.delete("/memos/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(`Deleting memo with id: ${id}`);
+  try {
+    const pool = await poolPromise;
+    await pool.request().query`
+      DELETE FROM Memos WHERE Id=${id}
+    `;
+    res.send({ message: "Memo deleted" });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+});
+
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log(`API running on port ${port}`));
