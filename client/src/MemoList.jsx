@@ -18,6 +18,10 @@ export default function MemoList() {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
 
+  useEffect(() => {
+    if (page > 0) loadMemos();
+  }, [page]);
+
   const loadMemos = async () => {
     const res = await fetch(`${API}?page=${page}&pageSize=${pageSize}`);
     console.log("Response", res);
@@ -25,10 +29,6 @@ export default function MemoList() {
     setMemos(data.data);
     setTotal(data.total);
   };
-
-  useEffect(() => {
-    loadMemos();
-  }, [page]);
 
   const deleteMemo = async () => {
     await fetch(`${API}/${deleteTarget.id}`, { method: "DELETE" });

@@ -6,7 +6,7 @@ import Body from "./Body";
 import Footer from "./Footer";
 
 function App() {
-  const API = API_URL + "/todos";
+  const [API, setAPI] = useState("");
   const [todos, setTodos] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [todoToDelete, setTodoToDelete] = useState(null);
@@ -18,11 +18,17 @@ function App() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    setServiceUrl({
-      url: API,
-      reload: true,
-    });
+    setAPI(API_URL + "/todos");
   }, []);
+
+  useEffect(() => {
+    if (API) {
+      setServiceUrl({
+        url: API,
+        reload: true,
+      });
+    }
+  }, [API]);
 
   useEffect(() => {
     if (serviceUrl.reload) {
@@ -131,25 +137,29 @@ function App() {
       </div>
       <hr />
       <div id="error">{error}</div>
-      <label htmlFor="completed">Completed</label>
-      <input
-        type="checkbox"
-        name="completed"
-        id="completed"
-        onChange={() => emptyMessage()}
-      />
-      <label htmlFor="title">Title</label>
-      <input
-        type="text"
-        name="title"
-        id="title"
-        onChange={() => emptyMessage()}
-      />
+      <label htmlFor="completed">
+        Completed
+        <input
+          type="checkbox"
+          name="completed"
+          id="completed"
+          onChange={() => emptyMessage()}
+        />
+      </label>
+      <label htmlFor="title">
+        Title
+        <input
+          type="text"
+          name="title"
+          id="title"
+          onChange={() => emptyMessage()}
+        />
+      </label>
       <button id="add" onClick={() => addNew()}>
         Add New
       </button>
       <div id="message">{message}</div>
-
+      <hr />
       {todos.map((todo) => (
         <div key={todo.id}>
           <span className="delete">

@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "./Footer";
 import "./MemoBody.css";
 
@@ -33,9 +33,6 @@ export default function MemoBody({ onSubmit, onClose, initialData = null }) {
       setCompleted(initialData.completed);
     }
   }, [initialData]);
-  useEffect(() => {
-    console.log("Initial Date Effect", date, "id=", id);
-  }, [date]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
