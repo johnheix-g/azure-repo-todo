@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./ModalComponent.css";
 
-export default function ConfirmModal({ open, Header, Body, Footer = null }) {
+export default function ModalComponent({ open, Header, Body, Footer = null }) {
   const modalRef = useRef(null);
   const [dragging, setDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });

@@ -6,6 +6,7 @@ import Header from "./Header";
 import Body from "./Body";
 import MemoBody from "./MemoBody";
 import "./MemoList.css";
+import MemoDetail from "./MemoDetail";
 
 export default function MemoList() {
   const API = API_URL + "/memos";
@@ -17,6 +18,7 @@ export default function MemoList() {
 
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
+  const [detailTarget, setDetailTarget] = useState(null);
 
   const loadMemos = useCallback(async () => {
     const res = await fetch(`${API}?page=${page}&pageSize=${pageSize}`);
@@ -80,7 +82,17 @@ export default function MemoList() {
             return (
               <tr key={"mrmo-" + m.id}>
                 <td>{m.type}</td>
-                <td>{m.title}</td>
+                <td>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setDetailTarget(m);
+                    }}
+                  >
+                    {m.title}
+                  </a>
+                </td>
                 <td>{new Date(m.date).toISOString().split("T")[0]}</td>
                 <td>{m.note}</td>
                 <td>{m.completed ? "✔" : "✘"}</td>
@@ -119,34 +131,41 @@ export default function MemoList() {
           </button>
         ))}
       </div>
-      <ModalComponent
-        open={editMemoOpen}
-        Header={
-          <Header
-            header={editTarget ? "Edit Memo" : "Add New Memo"}
-            onCancel={() => handleClose()}
-          />
-        }
-        Body={
-          <Body
-            title={editTarget ? "Edit Memo" : "Add New Memo"}
-            message={
-              <MemoBody
-                onSubmit={handleSubmit}
-                onClose={() => handleClose()}
-                initialData={editTarget}
-              />
-            }
-          />
-        }
-      />
 
-      <ConfirmModal
-        open={!!deleteTarget}
-        title={deleteTarget?.title}
-        onConfirm={deleteMemo}
-        onCancel={() => setDeleteTarget(null)}
-      />
+      {detailTarget && (
+        <MemoDetail memo={detailTarget} onClose={() => setDetailTarget(null)} />
+      )}
+      {editMemoOpen && (
+        <ModalComponent
+          open={editMemoOpen}
+          Header={
+            <Header
+              header={editTarget ? "Edit Memo" : "Add New Memo"}
+              onCancel={() => handleClose()}
+            />
+          }
+          Body={
+            <Body
+              title={editTarget ? "Edit Memo" : "Add New Memo"}
+              message={
+                <MemoBody
+                  onSubmit={handleSubmit}
+                  onClose={() => handleClose()}
+                  initialData={editTarget}
+                />
+              }
+            />
+          }
+        />
+      )}
+      {deleteTarget && (
+        <ConfirmModal
+          open={!!deleteTarget}
+          title={deleteTarget?.title}
+          onConfirm={deleteMemo}
+          onCancel={() => setDeleteTarget(null)}
+        />
+      )}
     </div>
   );
 }
