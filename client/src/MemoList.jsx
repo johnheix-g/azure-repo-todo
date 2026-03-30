@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { use, useCallback, useEffect, useState } from "react";
 import ConfirmModal from "./ConfirmModal";
 import ModalComponent from "./ModalComponent";
 import { API_URL } from "./const";
@@ -21,15 +21,23 @@ export default function MemoList() {
   const [detailTarget, setDetailTarget] = useState(null);
   const [orderBy, setOrderBy] = useState("date");
   const [orderDirection, setOrderDirection] = useState("desc");
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   const loadMemos = useCallback(async () => {
     const res = await fetch(
-      `${API}?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&orderDirection=${orderDirection}`,
+      `${API}?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&orderDirection=${orderDirection}&search=${searchKeyword}`,
     );
     const data = await res.json();
     setMemos(data.data);
     setTotal(data.total);
-  }, [page, pageSize, API, orderBy, orderDirection]);
+  }, [page, pageSize, API, orderBy, orderDirection, searchKeyword]);
+
+  useEffect(() => {
+    const totalPages = Math.ceil(total / pageSize);
+    if (page > totalPages && totalPages > 0) {
+      setPage(totalPages); // Adjust page if it exceeds total pages after deletion
+    }
+  }, [total]);
 
   useEffect(() => {
     loadMemos();
@@ -70,6 +78,11 @@ export default function MemoList() {
     }
   };
 
+  const handleSearch = (e) => {
+    const keyword = e.target.value.toLowerCase();
+    setSearchKeyword(keyword);
+  };
+
   return (
     <div className="memo-container">
       <h1>Memo List</h1>
@@ -81,6 +94,13 @@ export default function MemoList() {
       >
         Add New Memo
       </button>
+
+      <input
+        type="text"
+        placeholder="Search..."
+        className="search-input"
+        onChange={(e) => handleSearch(e)}
+      />
 
       <table className="memo-table">
         <thead>
@@ -109,7 +129,14 @@ export default function MemoList() {
                   : " ▼"
                 : null}
             </th>
-            <th>Note</th>
+            <th onClick={() => handleOrder("Note")}>
+              Note{" "}
+              {orderBy === "Note"
+                ? orderDirection === "asc"
+                  ? " ▲"
+                  : " ▼"
+                : null}
+            </th>
             <th>Completed</th>
             <th>Action</th>
           </tr>
@@ -170,6 +197,11 @@ export default function MemoList() {
             {i + 1}
           </button>
         ))}
+        {total > 0 && (
+          <span className="total">
+            Total: {total} {total > 1 ? "memos" : "memo"}
+          </span>
+        )}
       </div>
 
       {detailTarget && (
