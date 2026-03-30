@@ -33,11 +33,10 @@ export default function MemoList() {
   }, [page, pageSize, API, orderBy, orderDirection, searchKeyword]);
 
   useEffect(() => {
-    const totalPages = Math.ceil(total / pageSize);
-    if (page > totalPages && totalPages > 0) {
-      setPage(totalPages); // Adjust page if it exceeds total pages after deletion
+    if (total > 0 && (page - 1) * pageSize >= total) {
+      setPage(1); // Reset to first page if current page exceeds total pages
     }
-  }, [total]);
+  }, [total, page, pageSize]);
 
   useEffect(() => {
     loadMemos();
