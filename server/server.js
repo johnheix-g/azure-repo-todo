@@ -124,7 +124,6 @@ app.get("/memos", async (req, res) => {
   const offset = (page - 1) * pageSize;
   const orderBy = req.query.orderBy || "date"; // Default order by date
   const orderDirection = req.query.orderDirection === "asc" ? "ASC" : "DESC"; // Default to DESC
-  const search = req.query.search ? req.query.search.toLowerCase() : ""; // Search keyword
 
   console.log(
     `Fetching memos - Page: ${page}, Page Size: ${pageSize}, Offset: ${offset}`,
@@ -135,13 +134,11 @@ app.get("/memos", async (req, res) => {
     const result = await pool.request().query(`
       SELECT *
       FROM Memos
-      WHERE LOWER(title) LIKE '%${search}%' OR LOWER(note) LIKE '%${search}%' OR LOWER(type) LIKE '%${search}%' or date LIKE '%${search}%'
       ORDER BY ${orderBy} ${orderDirection}
       OFFSET ${offset} ROWS
       FETCH NEXT ${pageSize} ROWS ONLY;
 
-      SELECT COUNT(*) AS total FROM Memos
-      WHERE LOWER(title) LIKE '%${search}%' OR LOWER(note) LIKE '%${search}%' OR LOWER(type) LIKE '%${search}%' or date LIKE '%${search}%';
+      SELECT COUNT(*) AS total FROM Memos;
     `);
 
     res.json({
