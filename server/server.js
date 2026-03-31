@@ -131,7 +131,7 @@ app.get("/memos", async (req, res) => {
   );
   try {
     const pool = await poolPromise;
-
+    /*
     const result = await pool.request().query(`
       SELECT *
       FROM Memos
@@ -143,7 +143,34 @@ app.get("/memos", async (req, res) => {
             SELECT COUNT(*) AS total FROM Memos
       WHERE LOWER(title) LIKE '%${search}%' OR LOWER(note) LIKE '%${search}%' OR LOWER(type) LIKE '%${search}%' or date LIKE '%${search}%';
     `);
+    /**
+ */
+    const result = await pool
+      .request()
+      .input("search", sql.VarChar, `%${search}%`)
+      .input("offset", sql.Int, offset)
+      .input("pageSize", sql.Int, pageSize).query(`
+    SELECT *
+    FROM Memos
+    WHERE 
+      title LIKE @search OR
+      note LIKE @search OR
+      type LIKE @search OR
+      CONVERT(VARCHAR(10), date, 120) LIKE @search
+    ORDER BY ${orderBy} ${orderDirection}
+    OFFSET @offset ROWS
+    FETCH NEXT @pageSize ROWS ONLY;
 
+    SELECT COUNT(*) AS total
+    FROM Memos
+    WHERE 
+      title LIKE @search OR
+      note LIKE @search OR
+      type LIKE @search OR
+      CONVERT(VARCHAR(10), date, 120) LIKE @search;
+  `);
+    /*
+     */
     res.json({
       data: result.recordsets[0],
       total: result.recordsets[1][0].total,
