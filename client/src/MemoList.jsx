@@ -29,7 +29,13 @@ export default function MemoList() {
     const data = await res.json();
     setMemos(data.data);
     setTotal(data.total);
-  }, [page, pageSize, API, orderBy, orderDirection]);
+  }, [page, pageSize, API, orderBy, orderDirection, searchKeyword]);
+
+  useEffect(() => {
+    if (total > 0 && (page - 1) * pageSize >= total) {
+      setPage(1); // Reset to first page if current page exceeds total pages
+    }
+  }, [total, page, pageSize]);
 
   useEffect(() => {
     loadMemos();
