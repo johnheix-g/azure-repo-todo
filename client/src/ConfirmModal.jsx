@@ -53,17 +53,17 @@ export default function ConfirmModal({ open, title, onConfirm, onCancel }) {
             ✕
           </button>
         </div>
-
-        <h3>Delete "{title}"?</h3>
-        <p>This action cannot be undone.</p>
-
-        <div className="modal-buttons">
-          <button className="btn-cancel" onClick={onCancel}>
-            Cancel
-          </button>
-          <button className="btn-delete" onClick={onConfirm}>
-            Delete
-          </button>
+        <div className="modal-body">
+          <h3>Delete "{title}"?</h3>
+          <p>This action cannot be undone.</p>
+          <div className="modal-buttons">
+            <button className="btn-cancel" onClick={onCancel}>
+              Cancel
+            </button>
+            <button className="btn-delete" onClick={onConfirm}>
+              Delete
+            </button>
+          </div>
         </div>
       </div>
     </div>
