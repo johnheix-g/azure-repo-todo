@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import ConfirmModal from "./ConfirmModal";
 import ModalComponent from "./ModalComponent";
-import { API_URL } from "./const";
+import { FUNC_API_URL } from "./const";
 import Header from "./Header";
 import Body from "./Body";
 import MemoBody from "./MemoBody";
@@ -9,7 +9,7 @@ import "./MemoList.css";
 import MemoDetail from "./MemoDetail";
 
 export default function MemoList() {
-  const API = API_URL + "/memos";
+  const API = FUNC_API_URL + "/memos";
   const [memos, setMemos] = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -28,8 +28,9 @@ export default function MemoList() {
       `${API}?page=${page}&pageSize=${pageSize}&orderBy=${orderBy}&orderDirection=${orderDirection}&search=${searchKeyword}`,
     );
     const data = await res.json();
+    console.log("Fetched memos", data);
     setMemos(data.data);
-    setTotal(data.total);
+    setTotal(data.pagination.total);
   }, [page, pageSize, API, orderBy, orderDirection, searchKeyword]);
 
   useEffect(() => {

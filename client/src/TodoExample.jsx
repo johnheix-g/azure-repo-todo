@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import ModalComponent from "./ModalComponent";
-import { API_URL } from "./const";
+import { FUNC_API_URL } from "./const";
 import Header from "./Header";
 import Body from "./Body";
 import Footer from "./Footer";
@@ -18,7 +18,7 @@ function App() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    setAPI(API_URL + "/todos");
+    setAPI(FUNC_API_URL + "/todos");
   }, []);
 
   useEffect(() => {

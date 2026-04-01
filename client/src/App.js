@@ -1,44 +1,25 @@
 import { useState } from "react";
 import MemoList from "./MemoList";
-import TodoExample from "./TodoExample";
 import "./App.css";
 
-const Button = {
+const Menu = {
   TODO: "TODO",
   MEMO: "MEMO",
 };
 
 function App() {
-  const [todo, setTodo] = useState(false);
-  const [memo, setMemo] = useState(false);
-
-  const setAll = (btn) => {
-    if (btn === Button.TODO) {
-      setTodo(true);
-      setMemo(false);
-    } else if (btn === Button.MEMO) {
-      setTodo(false);
-      setMemo(true);
-    }
-  };
+  const [menu, setMenu] = useState("");
 
   return (
     <div id="content">
       <button
-        title="Todo List"
-        className="button"
-        onClick={() => setAll(Button.TODO)}
-      >
-        Todo List
-      </button>
-      <button
         title="Memo Management"
         className="button"
-        onClick={() => setAll(Button.MEMO)}
+        onClick={() => setMenu(Menu.MEMO)}
       >
         Memo Management
       </button>
-      {todo ? <TodoExample /> : memo ? <MemoList /> : null}
+      {menu === Menu.MEMO && <MemoList />}
     </div>
   );
 }
