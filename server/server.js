@@ -173,9 +173,11 @@ app.get("/memos", async (req, res) => {
      */
     res.json({
       data: result.recordsets[0],
-      total: result.recordsets[1][0].total,
-      page,
-      pageSize,
+      pagination: {
+        total: result.recordsets[1][0].total,
+        page,
+        pageSize,
+      },
     });
   } catch (err) {
     console.log("Error fetching memos", err);
